@@ -46,7 +46,7 @@ namespace PhaserArray.AutoVehicleClear
 			Logger.Log(string.Format("Cleared {0} vehicles!", cleared));
 			if (config.SendClearMessage && cleared > 0)
 			{
-				UnturnedChat.Say(Translate("autovehicleclear_cleared_vehicles", cleared), Color.yellow);
+				UnturnedChat.Say(Translate("autovehicleclear_cleared_vehicles", cleared), Color.green);
 			}
 		}
 
