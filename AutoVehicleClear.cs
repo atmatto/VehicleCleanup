@@ -1,16 +1,14 @@
 ﻿using Rocket.Core.Plugins;
-using UnityEngine;
 using Rocket.Core.Logging;
+using Rocket.Unturned.Chat;
 using SDG.Unturned;
-using Rocket.Unturned;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Rocket.API.Collections;
+using UnityEngine;
 
 namespace AutoVehicleClear
 {
-    public class AutoVehicleClear : RocketPlugin<AutoVehicleClearConfiguration>
+	public class AutoVehicleClear : RocketPlugin<AutoVehicleClearConfiguration>
 	{
 		public const string version = "v1.0";
 
@@ -31,6 +29,9 @@ namespace AutoVehicleClear
 
 		public void ClearVehicles()
 		{
+			Logger.Log("Clearing vehicles!");
+
+			var cleared = 0;
 			var vehicles = VehicleManager.vehicles;
 			for (int i = vehicles.Count - 1; i >= 0; i--)
 			{
@@ -38,7 +39,14 @@ namespace AutoVehicleClear
 				if (CanClearVehicle(vehicle))
 				{
 					VehicleManager.instance.channel.send("tellVehicleDestroy", ESteamCall.ALL, ESteamPacket.UPDATE_RELIABLE_BUFFER, vehicle.instanceID);
+					cleared++;
 				}
+			}
+
+			Logger.Log(string.Format("Cleared {0} vehicles!", cleared));
+			if (config.SendClearMessage && cleared > 0)
+			{
+				UnturnedChat.Say(Translate("autovehicleclear_cleared_vehicles", cleared), Color.yellow);
 			}
 		}
 
@@ -89,6 +97,17 @@ namespace AutoVehicleClear
 				}
 			}
 			return false;
+		}
+
+		public override TranslationList DefaultTranslations
+		{
+			get
+			{
+				return new TranslationList()
+				{
+					{"autovehicleclear_cleared_vehicles", "Cleared {0} vehicles!"}
+				};
+			}
 		}
 	}
 }

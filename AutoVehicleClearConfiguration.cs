@@ -4,6 +4,7 @@ namespace AutoVehicleClear
 {
 	public class AutoVehicleClearConfiguration : IRocketPluginConfiguration
 	{
+		public bool SendClearMessage;
 		public bool ClearAll;
 		public bool ClearExploded;
 		public bool ClearDrowned;
@@ -13,6 +14,7 @@ namespace AutoVehicleClear
 
 		public void LoadDefaults()
 		{
+			SendClearMessage = true;
 			ClearAll = false;
 			ClearExploded = true;
 			ClearDrowned = true;
