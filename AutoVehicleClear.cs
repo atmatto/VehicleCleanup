@@ -6,7 +6,7 @@ using System.Linq;
 using Rocket.API.Collections;
 using UnityEngine;
 
-namespace AutoVehicleClear
+namespace PhaserArray.AutoVehicleClear
 {
 	public class AutoVehicleClear : RocketPlugin<AutoVehicleClearConfiguration>
 	{

@@ -1,6 +1,6 @@
 ﻿using Rocket.API;
 
-namespace AutoVehicleClear
+namespace PhaserArray.AutoVehicleClear
 {
 	public class AutoVehicleClearConfiguration : IRocketPluginConfiguration
 	{

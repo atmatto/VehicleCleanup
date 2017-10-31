@@ -7,7 +7,7 @@
     <ProjectGuid>{61D314B2-0808-4BCF-ACA6-C4151F1CE8C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoVehicleClear</RootNamespace>
+    <RootNamespace>PhaserArray.AutoVehicleClear</RootNamespace>
     <AssemblyName>AutoVehicleClear</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
