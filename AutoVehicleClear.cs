@@ -43,7 +43,7 @@ namespace PhaserArray.AutoVehicleClear
 				}
 			}
 
-			Logger.Log(string.Format("Cleared {0} vehicles!", cleared));
+			Logger.Log($"Cleared {cleared} vehicles!");
 			if (config.SendClearMessage && cleared > 0)
 			{
 				UnturnedChat.Say(Translate("autovehicleclear_cleared_vehicles", cleared), Color.green);
@@ -52,7 +52,7 @@ namespace PhaserArray.AutoVehicleClear
 
 		public bool CanClearVehicle(InteractableVehicle vehicle)
 		{
-			if (!vehicle.passengers.All(p => p.player == null))
+			if (vehicle.passengers.Any(p => p.player != null) || vehicle.asset.engine == EEngine.TRAIN)
 			{
 				return false;
 			}
@@ -83,7 +83,7 @@ namespace PhaserArray.AutoVehicleClear
 					}
 
 					var aliveTires = 0;
-					for (int i = 0; i < totalTires; i++)
+					for (var i = 0; i < totalTires; i++)
 					{
 						if (tires.GetChild(i).gameObject.activeSelf)
 						{
