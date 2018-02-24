@@ -10,7 +10,7 @@ namespace PhaserArray.AutoVehicleClear
 {
 	public class AutoVehicleClear : RocketPlugin<AutoVehicleClearConfiguration>
 	{
-		public const string version = "v1.0";
+		public const string version = "v1.1";
 
 		private AutoVehicleClearConfiguration config;
 
