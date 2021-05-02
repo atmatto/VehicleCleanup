@@ -1,35 +1,58 @@
 ﻿using Rocket.Core.Plugins;
 using Rocket.Core.Logging;
 using Rocket.Unturned.Chat;
+using Rocket.Core.Commands;
+using Rocket.API;
 using SDG.Unturned;
 using System.Linq;
 using Rocket.API.Collections;
 using UnityEngine;
 
-namespace PhaserArray.AutoVehicleClear
+namespace Matto.VehicleCleanup
 {
-	public class AutoVehicleClear : RocketPlugin<AutoVehicleClearConfiguration>
+	public class VehicleCleanup : RocketPlugin<VehicleCleanupConfiguration>
 	{
-		public const string version = "v1.1";
+		public const string version = "v2.0.0";
 
-		private AutoVehicleClearConfiguration config;
+		private VehicleCleanupConfiguration config;
 
 		protected override void Load()
 		{
 			config = Configuration.Instance;
 
-			Logger.Log("Starting AutoVehicleClear " + version + "!");
-			InvokeRepeating("ClearVehicles", config.ClearInterval, config.ClearInterval);
+			Rocket.Core.Logging.Logger.Log("Starting VehicleCleanup " + version + "!");
+			if (config.Automatic) {
+				InvokeRepeating("SendWarning", config.ClearInterval, config.ClearInterval);
+			}
 		}
 
 		protected override void Unload()
 		{
+			CancelInvoke("SendWarning");
 			CancelInvoke("ClearVehicles");
+		}
+
+		[RocketCommand("clearvehicles", "Clear vehicles, exact behaviour depends on plugin's config.")]
+		[RocketCommandAlias("cv")]
+		public void ClearCommand(IRocketPlayer caller, string[] command)
+		{
+			if (config.SendWarningMessage) {
+				SendWarning();
+			} else {
+				ClearVehicles();
+			}
+		}
+		public void SendWarning()
+		{
+			if (config.SendWarningMessage) {
+				UnturnedChat.Say(Translate("VehicleCleanup_warning", config.WarningTime), Color.yellow);
+			}
+			Invoke("ClearVehicles", config.WarningTime);
 		}
 
 		public void ClearVehicles()
 		{
-			Logger.Log("Clearing vehicles!");
+			Rocket.Core.Logging.Logger.Log("Clearing vehicles!");
 
 			var cleared = 0;
 			var vehicles = VehicleManager.vehicles;
@@ -43,16 +66,20 @@ namespace PhaserArray.AutoVehicleClear
 				}
 			}
 
-			Logger.Log($"Cleared {cleared} vehicles!");
+			Rocket.Core.Logging.Logger.Log($"Cleared {cleared} vehicles!");
 			if (config.SendClearMessage && cleared > 0)
 			{
-				UnturnedChat.Say(Translate("autovehicleclear_cleared_vehicles", cleared), Color.green);
+				UnturnedChat.Say(Translate("VehicleCleanup_cleared_vehicles", cleared), Color.green);
 			}
 		}
 
 		public bool CanClearVehicle(InteractableVehicle vehicle)
 		{
 			if (vehicle.passengers.Any(p => p.player != null) || vehicle.asset.engine == EEngine.TRAIN)
+			{
+				return false;
+			}
+			if (config.ProtectLocked && vehicle.isLocked)
 			{
 				return false;
 			}
@@ -105,7 +132,8 @@ namespace PhaserArray.AutoVehicleClear
 			{
 				return new TranslationList()
 				{
-					{"autovehicleclear_cleared_vehicles", "Cleared {0} vehicles!"}
+					{"VehicleCleanup_cleared_vehicles", "Cleared {0} vehicles!"},
+					{"VehicleCleanup_warning", "Clearing vehicles in {0} seconds!"}
 				};
 			}
 		}
