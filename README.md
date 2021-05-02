@@ -31,7 +31,9 @@ Installation is simple, just download the DLL and move it to your Server's `/Roc
 I haven't set up the permissions, because of insufficient docummentation of LDM. (I'm not sure how to do it properly, if you know how, please submit an issue or pull request)
 
 ## Building from source
-In order to build the plugin on Linux, make sure you have installed `dotnet` and `mono`. Then run these commands (build.sh):
-```dotnet restore
-msbuild -p:Configuration=Release VehicleCleanup.csproj```
+In order to build the plugin on Linux, make sure you have installed `dotnet` and `mono`. Then run these commands (`build.sh`):
+```
+dotnet restore
+msbuild -p:Configuration=Release VehicleCleanup.csproj
+```
 On Windows, please follow a tutorial on YouTube, or build the plugin yourself.
